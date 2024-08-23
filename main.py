@@ -14,8 +14,8 @@ if __name__ == "__main__":
         numero_de_pares = int(sys.argv[1])
 
     info = DataCom("portas.txt", numero_de_pares)
-    servidor = Servidor(info)
     cliente = Cliente(info)
+    servidor = Servidor(info)
 
     tserver = threading.Thread(target=servidor.run)#, args=(info,))
     tserver.start()

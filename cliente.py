@@ -11,22 +11,60 @@ class Cliente:
         self.open()
         while True:
             msg = input(str(self.prompt))
-            if(msg.strip()!=""):
+            
+            if msg.strip().lower() == 'k':  # Se a mensagem for 'k'
+                protocolo = []
+                # Primeiro elemento: Inteiro digitado pelo usuário
+                protocolo.append(int(input("Digite o destino: ")))
+
+                # Segundo elemento: String "localhost"
+                protocolo.append("localhost")
+
+                # Terceiro elemento: Porta do cliente que está enviando
+                protocolo.append(self.info.PORT_SERVER)
+
+                # Quarto elemento: String digitada pelo usuário
+                protocolo.append(input("Digite a função: "))
+
+                # Enviar a lista como string
+                self.send(str(protocolo))
+
+                self.receive()
+            
+            elif msg.strip().lower() != "":
                 self.send(msg)
                 self.receive()
-                if(str(msg).strip().lower()=='exit'): 
+                if str(msg).strip().lower() == 'exit':
                     self.close()
                     break
 
+
     def send(self, msg):
-        if(self.connected): 
+        if(self.connected):
             self.sc.sendall(msg.encode('utf-8'))
 
     def receive(self):
-        if(self.connected): 
-            rec_msg = self.sc.recv(1024).strip()
-            rec_msg = rec_msg.decode('utf-8')
-            print("SUCESSOR({0}):>> {1}".format(self.info.sucessor_name, rec_msg))
+        if self.connected:
+            try:
+                rec_msg = self.sc.recv(1024).strip()
+                rec_msg = rec_msg.decode('utf-8')
+                
+                # Verificar se a mensagem é uma lista de protocolo
+                try:
+                    protocolo = eval(rec_msg)
+                    if isinstance(protocolo, list) and len(protocolo) == 4:
+                        print(f"Enviado protocolo: {protocolo}")
+                    elif str(rec_msg).strip().lower() == "exit":
+                        None
+                    else:
+                        print(f"Mensagem não reconhecida como protocolo: {rec_msg}")
+                except:
+                    # Se não for possível avaliar a string como lista
+                    print(f"SUCESSOR({self.info.sucessor_name}):>> {rec_msg}")
+            except ConnectionError as e:
+                print(f"Erro de conexão: {e}")
+            except Exception as e:
+                print(f"Erro inesperado: {e}")
 
     def close(self):
         self.open()

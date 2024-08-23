@@ -12,6 +12,9 @@ class Servidor:
                 server.serve_forever()
             finally: server.shutdown() #except KeyboardInterrupt: #pass # server.server_close()
 
+
+
+
 ############################################## Classe de Apoio ao Server ###########################################
 class ComunicadorTCPHandler(socketserver.BaseRequestHandler):
     def handle(self):
@@ -20,14 +23,29 @@ class ComunicadorTCPHandler(socketserver.BaseRequestHandler):
             try:
                 self.data = self.request.recv(1024).strip()
                 msg = self.data.decode('utf-8')
-                print("PEER: {0}, Mensagem: {1}\n{2}:>> ".format(self.client_address[0], msg, Servidor.prompt), end="")
-                #print("Client:>> ", end="")
-                self.request.sendall(self.data.upper())
+                
+                # Se a mensagem for uma lista de protocolo, exibir a lista
+                try:
+                    protocolo = eval(msg)  # Converte a string de volta para uma lista
+                    if isinstance(protocolo, list) and len(protocolo) == 4:
+                        print(f"{protocolo}")
+                    elif str(msg).strip().lower() == "exit":
+                        None
+                    else:
+                        print(f"Mensagem não reconhecida: {msg}")
+                except:
+                    print(f"Mensagem Recebida: {msg}")
+                
+                # Enviar resposta
+                self.request.sendall(self.data)
 
-            except:
+            except Exception as e:
+                print(f"Erro: {e}")
                 print("*********************** CONNECTION DOWN ***********************")
                 sys.exit()
+            
             if str(msg).strip().lower() == "exit":
-                print("Antecessor({0}) saiu (e informou)!!!".format(Servidor.prompt))
+                print(f"Antecessor({Servidor.prompt}) saiu (e informou)!!!")
                 sys.exit()
+
 
