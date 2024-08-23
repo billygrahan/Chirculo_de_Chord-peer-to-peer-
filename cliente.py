@@ -14,8 +14,8 @@ class Cliente:
             
             if msg.strip().lower() == 'k':  # Se a mensagem for 'k'
                 protocolo = []
-                # Primeiro elemento: Inteiro digitado pelo usuário
-                protocolo.append(int(input("Digite o destino: ")))
+                # Primeiro elemento: k porta a ser enviada a requisição
+                protocolo.append(int(input("Digite a porta destino destino: ")))
 
                 # Segundo elemento: String "localhost"
                 protocolo.append("localhost")
@@ -59,7 +59,7 @@ class Cliente:
                     else:
                         print(f"Mensagem não reconhecida como protocolo: {rec_msg}")
                 except:
-                    # Se não for possível avaliar a string como lista
+                    #em caso de mensagens comuns sem protocolo
                     print(f"SUCESSOR({self.info.sucessor_name}):>> {rec_msg}")
             except ConnectionError as e:
                 print(f"Erro de conexão: {e}")
@@ -79,3 +79,22 @@ class Cliente:
             except IOError: 
                 print("SUCESSOR({0}), Host({1}), PORTA({2}) Falhou!!".format(self.info.sucessor_name, self.info.HOST_SERVER, str(self.info.SUCESSOR)))
                 self.connected = False
+
+    def encaminhar_protocolo(self, protocolo):
+        if protocolo[0] != self.info.PORT_SERVER:
+            try:
+                self.open()
+                self.send(str(protocolo))
+            except Exception as e:
+                print(f"Erro ao encaminhar protocolo: {e}")
+
+        else:
+            print("Recurso não encontrado!")
+
+    def resposta_cliente_protocolo(self, porta_destino, mensagem):
+        try:
+            self.info.PORT_CLIENT = porta_destino
+            self.open()
+            self.send(mensagem)
+        except Exception as e:
+            print(f"Erro ao enviar resposta: {e}")
