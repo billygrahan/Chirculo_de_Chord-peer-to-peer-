@@ -8,12 +8,16 @@ from data_com import DataCom
 from servidor import Servidor
 from cliente import Cliente
 
-if __name__ == "__main__":
-    try:
-        numero_de_pares = 2
-        if len(sys.argv)>=2:
+def main():
+    numero_de_pares = 2
+    if len(sys.argv) >= 2:
+        try:
             numero_de_pares = int(sys.argv[1])
+        except ValueError:
+            print("Numero de pares invalido, utilizando 2 por padrao.")
+            numero_de_pares = 2
 
+    try:
         info = DataCom("portas.txt", numero_de_pares)
         cliente = Cliente(info)
         servidor = Servidor(info, cliente)
@@ -39,5 +43,14 @@ if __name__ == "__main__":
             cliente.close()
             print(repr(readchar.readkey()))
     except Exception as e:
-        print("Erro ao conectar:", str(e))
+        print("Erro: ", str(e))
         print(repr(readchar.readkey()))
+    finally:
+        try:
+            cliente.close()
+        except Exception as e:
+            print("Erro ao fechar o cliente: ", str(e))
+
+
+if __name__ == "__main__":
+    main()
