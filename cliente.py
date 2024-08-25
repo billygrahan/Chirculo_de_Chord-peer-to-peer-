@@ -1,4 +1,6 @@
 import socket
+import math
+from node import Node
 
 class Cliente:
     def __init__(self, _info):
@@ -6,7 +8,21 @@ class Cliente:
         self.info = _info
         self.connected = False
         self.prompt = self.info.host_name + ":>> "
-    
+
+    def fingerTable():
+        try:
+            node_ids = [0, 1, 3, 4, 6]
+            m = math.ceil(math.log2(len(node_ids)))
+            nodes = [Node(id, m) for id in node_ids]
+
+            for node in nodes:
+                node.calculate_finger_table(nodes)
+
+            for node in nodes:
+                print(node)
+        except Exception as e:
+            print("Erro: ", str(e))
+
     def run(self):
         self.open()
         while True:
@@ -30,6 +46,8 @@ class Cliente:
                 self.send(str(protocolo))
 
                 self.receive()
+
+                self.fingerTable()
             
             elif msg.strip().lower() != "":
                 self.send(msg)

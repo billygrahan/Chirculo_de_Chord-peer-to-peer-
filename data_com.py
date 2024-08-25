@@ -1,4 +1,3 @@
-
 import sys
 
 class DataCom:
@@ -36,8 +35,6 @@ class DataCom:
         Ant_I = I-1 if I-1>=0 else self.SIZE-1 # diminuir, e quando negativo Ant_I = SIZE-1
         self.antecessor_name = "NO[{0}]".format(self.MAP[Ant_I][0]*DataCom.FAIXA + DataCom.SPORT)
 
-
-        #self.Fi, self.Fj = 0, 0
         self.setF(I)
 
         return (I)
@@ -51,3 +48,5 @@ class DataCom:
         self.Fj = int(self.SUCESSOR-DataCom.SPORT)
         if(I+1==self.SIZE): self.Fi = int(self.PORT_SERVER-DataCom.SPORT + 1) # Caso Faixa Final até zero
 
+    def get_node_ids(self):
+        return [self.MAP[i][0] * DataCom.FAIXA + DataCom.SPORT for i in range(self.SIZE)]
