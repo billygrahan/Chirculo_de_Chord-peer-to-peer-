@@ -88,13 +88,20 @@ class Cliente:
             except Exception as e:
                 print(f"Erro ao encaminhar protocolo: {e}")
 
-        else:
-            print("Recurso não encontrado!")
+    
+    """
+    def resposta_protocolo(self, porta_destino, mensagem):
+        # Cria um novo socket para enviar a resposta
+        socket_resposta = socket.socket()
 
-    def resposta_cliente_protocolo(self, porta_destino, mensagem):
         try:
-            self.info.PORT_CLIENT = porta_destino
-            self.open()
-            self.send(mensagem)
+            socket_resposta.connect(("localhost",porta_destino))
+
+            socket_resposta.sendall(mensagem.encode('utf-8'))
+
+            print(f"Resposta enviada para {porta_destino}: {mensagem}")
+
+            socket_resposta.close()
         except Exception as e:
-            print(f"Erro ao enviar resposta: {e}")
+            print(f"Erro ao enviar resposta para {porta_destino}: {e}")
+            socket_resposta.close()"""
