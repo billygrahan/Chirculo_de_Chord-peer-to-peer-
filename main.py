@@ -26,8 +26,8 @@ def main():
 
         finger_table = info.fingerTable()
         print("Finger Table: ")
-        for idx, finger in enumerate(finger_table, start=1):
-            print(f"F{idx}: {finger}")
+        for id, finger in enumerate(finger_table, start=1):
+            print(f"ID{id}: {finger}")
 
         tserver = threading.Thread(target=servidor.run)
         tserver.start()
