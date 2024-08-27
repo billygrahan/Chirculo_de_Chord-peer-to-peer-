@@ -53,7 +53,7 @@ class Cliente:
                 try:
                     protocolo = eval(rec_msg)
                     if isinstance(protocolo, list) and len(protocolo) == 4:
-                        print(f"Enviado protocolo: {protocolo}")
+                        None
                     elif str(rec_msg).strip().lower() == "exit":
                         None
                     else:

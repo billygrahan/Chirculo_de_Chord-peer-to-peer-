@@ -50,7 +50,7 @@ class ComunicadorTCPHandler(socketserver.BaseRequestHandler):
                             self.retorna_protocolo(protocolo)
 
                         elif protocolo[2] == self.info.PORT_SERVER and protocolo[0] == protocolo[2]:
-                            print(f"comando recebido: {protocolo[3]}")
+                            print(f"Recurso recebido: {protocolo[3]}")
 
                         #recebe a resposta do protocolo enviado
                         elif protocolo[2] == self.info.PORT_SERVER:
@@ -87,6 +87,3 @@ class ComunicadorTCPHandler(socketserver.BaseRequestHandler):
                 sys.exit()
 
             msg = None
-
-
-
