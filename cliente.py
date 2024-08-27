@@ -46,8 +46,6 @@ class Cliente:
                 self.send(str(protocolo))
 
                 self.receive()
-
-                self.fingerTable()
             
             elif msg.strip().lower() != "":
                 self.send(msg)

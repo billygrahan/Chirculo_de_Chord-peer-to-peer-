@@ -8,34 +8,26 @@ from servidor import Servidor
 from cliente import Cliente
 from node import Node
 
-def fingerTable():
-    try:
-        node_ids = [0, 1, 3, 4, 6]
-        m = math.ceil(math.log2(len(node_ids)))
-        nodes = [Node(id, m) for id in node_ids]
-
-        for node in nodes:
-            node.calculate_finger_table(nodes)
-
-        for node in nodes:
-            print(node)
-    except Exception as e:
-        print("Erro: ", str(e))
-
 def main():
-    numero_de_pares = 2
+    # Defina o número total de nós na rede
+    total_nodes = 4  # Por exemplo, 4 nós
     if len(sys.argv) >= 2:
         try:
-            numero_de_pares = int(sys.argv[1])
+            total_nodes = int(sys.argv[1])
         except ValueError:
-            print("Número de pares inválido, utilizando 2 por padrão.")
-            numero_de_pares = 2
+            print("Número de pares inválido, utilizando 4 por padrão.")
+            total_nodes = 4
 
     try:
-        info = DataCom("portas.txt", numero_de_pares)
+        info = DataCom("portas.txt", total_nodes)
         
         cliente = Cliente(info)
         servidor = Servidor(info, cliente)
+
+        finger_table = info.fingerTable()
+        print("Finger Table: ")
+        for idx, finger in enumerate(finger_table, start=1):
+            print(f"F{idx}: {finger}")
 
         tserver = threading.Thread(target=servidor.run)
         tserver.start()
@@ -47,7 +39,6 @@ def main():
         enter = readchar.readkey() == '\r'
         if enter:
             print("****************** [<<EXIT>>=SAIR] ******************")
-            fingerTable()
             tclient = threading.Thread(target=cliente.run)
             tclient.start()
             tserver.join()
